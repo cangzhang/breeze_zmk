@@ -5,232 +5,51 @@
  */
 
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
-#include <dt-bindings/zmk/ext_power.h>
-
-#define DEFAULT 0
-#define MAC 1
-#define WINMOD 2
-#define MACMOD 3
-#define WINPAD 4
-#define MACPAD 5
+#include <dt-bindings/zmk/keys.h>
 
 / {
+    keymap {
+        compatible = "zmk,keymap";
 
-	macros {
-		wsshot: wsshot {
-            label = "Windows screenshot";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LSHFT &kp LGUI>,
-                <&macro_tap &kp S>,
-                <&macro_release &kp LSHFT &kp LGUI>;
+        default_layer {
+            // Ref: https://zmkfirmware.dev/docs/codes/
+            // ----------------------------------------------------------------------------------------------------------------------------------
+            // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   | DEL  | | -/_ | =/+  | PGUP |
+            // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |  \   | |  [  |  ]   | PGDN |
+            // | CAPS  |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |  '   | |     |  UP  |      |
+            // | SHIFT |  Z  |  X  |  C   |  V   |  B   |                   |  N   |  M    |  ,    |  .   |   /   | Mute | |  L  |  DN  |  R   |
+            //                     | LCTRL | GUI  | ALT  | SPACE |   | ENTER | BSPC | RAISE | LOWER |
+
+            bindings = <
+&kp ESC  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp BACKSPACE  &kp MINUS  &kp EQUAL  &kp PG_UP  &kp TAB  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &kp BSLH  &kp LBKT  &kp RBKT  &kp PG_DN  &kp LEFT_CONTROL  &kp A  &kp S  &kp D  &kp F  &kp G  &kp H  &kp J  &kp K  &kp L  &kp SEMI  &kp APOS  &kp UP  &kp LSHFT  &kp Z  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp C_MUTE  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LCTRL  &kp LEFT_ALT  &kp LEFT_GUI  &kp SPACE  &kp RET  &kp RIGHT_GUI  &mo 2  &mo 1
+            >;
         };
 
-        wpdesk: wpdesk {
-            label = "Windows previous desktop";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LCTRL &kp LGUI>,
-                <&macro_tap &kp LEFT>,
-                <&macro_release &kp LCTRL &kp LGUI>;
+        lower_layer {
+            // ---------------------------------------------------------------------------------------------------------------------------------- 
+            // | GRAVE |  F1 |  F2 |  F3  |  F4  |  F5  |                   |  F6  |  F7  |  F8  |  F9  | F10  |       | | HOME  |      |      | 
+            // |      |     |  ↑  |      |      |      |                   |      |      |      |      |       |       | |  END  | Mute | Play | 
+            // | CAPS |  ←  |  ↓  |  →   |      |      |                   |      |      |      |      |       |       | |       | Vol+ |      | 
+            // | SHIFT |     |     |      |      |      |                   |      |      |      |      |       |       | | Prev  | Vol- | Next | 
+            //                    |      |      |      |        |  |  BSPC | INS  |      |      |
+
+            bindings = <
+&kp GRAVE  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10  &trans  &kp HOME  &trans  &trans  &trans  &trans  &kp UP  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp END  &kp C_MUTE  &kp C_PLAY_PAUSE  &kp CAPS  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp C_VOL_UP  &kp LSHFT  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp C_PREV  &kp C_VOL_DN  &kp C_NEXT  &trans  &trans  &trans  &trans  &kp BSPC  &kp INS  &trans  &trans
+            >;
         };
 
-		wndesk: wndesk {
-			label = "Windows next desktop";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LCTRL &kp LGUI>,
-                <&macro_tap &kp RIGHT>,
-                <&macro_release &kp LCTRL &kp LGUI>;
-		};
+        raise_layer {
+            // ---------------------------------------------------------------------------------------------------------------------------------- 
+            // | BT1 |     |     |      |      | BT_CLR |                   |      |       |       |      |       |       | | LA PSCRN |      |      | 
+            // | BT2 |     |     |      |      |        |                   |      |       |       |      |       |       | |     |      |      | 
+            // | BT3 |     |     |      |      |        |                   |      |   <-  |   ↓   |  ↑   |  →   |       | |     |      |      | 
+            // | BT4 |     |     |      |      |        |                   |      |       |       |      |       |   \   | |     |      |      | 
+            //                   |      |      |        |        |  |  DEL  |      |       |       |
 
-		mpdesk: mpdesk {
-			label = "Mac previous desktop";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LCTRL>,
-                <&macro_tap &kp LEFT>,
-                <&macro_release &kp LCTRL>;
-		};
-
-		mndesk: mndesk {
-			label = "Mac next desktop";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LCTRL>,
-                <&macro_tap &kp RIGHT>,
-                <&macro_release &kp LCTRL>;
-		};
-
-		mmcontrol: mmcontrol {
-			label = "Mac mission control";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LCTRL>,
-                <&macro_tap &kp UP>,
-                <&macro_release &kp LCTRL>;
-		};
-
-		mcapp: mcapp {
-			label = "Mac windows in current app";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LCTRL>,
-                <&macro_tap &kp DOWN>,
-                <&macro_release &kp LCTRL>;
-		};
-
-		mwcycle: mwcycle {
-			label = "Same app window cycle";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-				<&macro_press &kp LGUI>,
-                <&macro_tap &kp GRAVE>,
-                <&macro_release &kp LCTRL>;
-		};
-	};
-
-	keymap {
-		compatible = "zmk,keymap";
-
-		default_layer {
-
-// Ref: https://zmkfirmware.dev/docs/codes/
-
-//  ----------------------------------------                       ------------------------------------------------------------------
-// |  ESC  |  1  |  2  |  3   |  4   |  5   |                     |  6   |  7    |  8    |  9   |   0   |  \   | | INS | HOME | PGUP |
-// |-------|-----|-----|------|------|------|                     |------|-------|-------|------|-------|------| |-----|------|------|
-// |  TAB  |  Q  |  W  |  E   |  R   |  T   |                     |  Y   |  U    |  I    |  O   |   P   |  [   | | DEL | END  | PGDN |
-// |-------|-----|-----|------|------|------|                     |------|-------|-------|------|-------|------|  -----|------|----- |
-// | SHIFT |  A  |  S  |  D   |  F   |  G   |                     |  H   |  J    |  K    |  L   |   ;   |  '   |       |  UP  |      |
-// |-------|-----|-----|------|------|------|                     |------|-------|-------|------|-------|------|  -----|------|----- |
-// | LCTRL |  Z  |  X  |  C   |  V   |  B   |                     |  N   |  M    |  ,    |  .   |   /   |  =   | |LEFT | DOWN |RIGHT |
-//  ---------------- ----------------------------              ------------------------------ ---------------------------------------
-//                  |WINMOD| LGUI | LALT | SPACE |            |BACKSPC|ENTER | RALT  |WINPAD |
-//                   ----------------------------              ------------------------------
-			bindings = <
-&kp ESC     &kp N1 &kp N2 &kp N3 &kp N4   &kp N5                          &kp N6     &kp N7   &kp N8    &kp N9  &kp N0   &kp BSLH   &kp INS  &kp HOME  &kp PG_UP
-&kp TAB     &kp Q  &kp W  &kp E  &kp R    &kp T                           &kp Y      &kp U    &kp I     &kp O   &kp P    &kp LBKT   &kp DEL  &kp END   &kp PG_DN
-&kp LSHFT   &kp A  &kp S  &kp D  &kp F    &kp G                           &kp H      &kp J    &kp K     &kp L   &kp SEMI &kp APOS            &kp UP 
-&kp LCTRL   &kp Z  &kp X  &kp C  &kp V    &kp B                           &kp N      &kp M    &kp COMMA &kp DOT &kp FSLH &kp EQUAL  &kp LEFT &kp DOWN  &kp RIGHT
-                          &mo 2  &kp LGUI &kp LALT &kp SPACE     &kp BSPC &kp ENTER  &kp RALT &mo 4
-			>;
-		};
-
-		mac_layer {
-
-//  ----------------------------------------                       ------------------------------------------------------------------
-// |  ESC  |  1  |  2  |  3   |  4   |  5   |                     |  6   |  7    |  8    |  9   |   0   |  \   | | INS | HOME | PGUP |
-// |-------|-----|-----|------|------|------|                     |------|-------|-------|------|-------|------| |-----|------|------|
-// |  TAB  |  Q  |  W  |  E   |  R   |  T   |                     |  Y   |  U    |  I    |  O   |   P   |  [   | | DEL | END  | PGDN |
-// |-------|-----|-----|------|------|------|                     |------|-------|-------|------|-------|------|  -----|------|----- |
-// | SHIFT |  A  |  S  |  D   |  F   |  G   |                     |  H   |  J    |  K    |  L   |   ;   |  '   |       |  UP  |      |
-// |-------|-----|-----|------|------|------|                     |------|-------|-------|------|-------|------|  -----|------|----- |
-// | LGUI  |  Z  |  X  |  C   |  V   |  B   |                     |  N   |  M    |  ,    |  .   |   /   |  =   | |LEFT | DOWN |RIGHT |
-//  ---------------- ----------------------------              ------------------------------ ---------------------------------------
-//                  |MACMOD|LCTRL | LALT | SPACE |            | BSPACE| ENTER| RALT  |MACPAD |
-//                   ----------------------------              ------------------------------
-			bindings = <
-&kp ESC     &kp N1 &kp N2 &kp N3  &kp N4    &kp N5                      &kp N6   &kp N7   &kp N8    &kp N9  &kp N0   &kp BSLH   &kp INS   &kp HOME  &kp PG_UP
-&kp TAB     &kp Q  &kp W  &kp E   &kp R     &kp T                       &kp Y    &kp U    &kp I     &kp O   &kp P    &kp LBKT   &kp DEL   &kp END   &kp PG_DN
-&kp LSHFT   &kp A  &kp S  &kp D   &kp F     &kp G                       &kp H    &kp J    &kp K     &kp L   &kp SEMI &kp APOS             &kp UP 
-&kp LGUI    &kp Z  &kp X  &kp C   &kp V     &kp B                       &kp N    &kp M    &kp COMMA &kp DOT &kp FSLH &kp EQUAL  &kp LEFT  &kp DOWN  &kp RIGHT
-                          &mo 3   &kp LCTRL &kp LALT &kp SPACE &kp BSPC &kp RET  &kp RALT &to 5
-			>;
-		};
-
-		winmod_layer {
-//  ----------------------------------------                     --------------------------------------------------------------------
-// | GRAVE |  F1 |  F2 |  F3  |  F4  |  F5  |                   |  F6  |  F7  |  F8  |  F9  |  F10  |  F11  | |  F12  |      |BT_CLR |
-// |-------|-----|-----|------|------|------|                   |------|------|------|------|-------|-------| |-------|------|-------|
-// | TAB   |WScSh|Vol+ | Mute |      |      |                   |      |      |      |      |       |   ]   | |       |      |       |
-// |-------|-----|-----|------|------|------|                   |------|------|------|------|-------|-------|  -------|------|------ |
-// | CAPS  |WPDes|Vol- |WNDes |      |      |                   |      |      |      |      |       |       |         | BT0  |       |
-// |-------|-----|-----|------|------|------|                   |------|------|------|------|-------|-------|  -------|------|------ |
-// | LCTRL |     |     |      |      |      |                   |      |      |      |      |       |   -   | | BT1   | BT2  | BT3   |
-//  ---------------- ----------------------------           ----------------------------- -------------------------------------------
-//                  |      | LGUI | LALT | SPACE |         | BSPACE |ENTER | RALT | MAC  |
-//                   ----------------------------           -----------------------------
-			bindings = <
-&kp GRAVE &kp F1  &kp F2       &kp F3     &kp F4  &kp F5                       &kp F6  &kp F7  &kp F8  &kp F9 &kp F10 &kp F11      &kp F12      &none         &bt BT_CLR
-&trans    &wsshot &kp C_VOL_UP &kp C_MUTE &none   &none                        &none   &none   &none   &none  &none   &kp RBKT     &none        &none         &none
-&kp CAPS  &wpdesk &kp C_VOL_DN &wndesk    &none   &none                        &none   &none   &none   &none  &none   &none                     &bt BT_SEL 0
-&trans    &none   &none        &none      &none   &none                        &none   &none   &none   &none  &none   &kp MINUS    &bt BT_SEL 1 &bt BT_SEL 2  &bt BT_SEL 3
-                               &none      &trans  &trans  &trans       &trans  &trans  &trans  &to 1
-			>;
-		};
-
-		macmod_layer {
-//  ----------------------------------------                     --------------------------------------------------------------------
-// | GRAVE |  F1 |  F2 |  F3  |  F4  |  F5  |                   |  F6  |  F7  |  F8  |  F9  |  F10  |  F11  | |  F12  |      |BT_CLR |
-// |-------|-----|-----|------|------|------|                   |------|------|------|------|-------|-------| |-------|------|-------|
-// | TAB   |mwcyc|Vol+ | Mute |      |      |                   |      |      |      |      |       |   ]   | |       |      |       |
-// |-------|-----|-----|------|------|------|                   |------|------|------|------|-------|-------|  -------|------|------ |
-// | CAPS  |MPDes|Vol- |MNDes |      |      |                   |      |      |      |      |       |       |         | BT0  |       |
-// |-------|-----|-----|------|------|------|                   |------|------|------|------|-------|-------|  -------|------|------ |
-// | LGUI  |     |     |      |      |      |                   |      |      |      |      |       |   -   | | BT1   | BT2  | BT3   |
-//  ---------------- ----------------------------           ----------------------------- -------------------------------------------
-//                  |      |LCTRL | LALT | SPACE |         | BSPACE |ENTER | RALT | WIN  |
-//                   ----------------------------           -----------------------------
-			bindings = <
-&kp GRAVE &kp F1   &kp F2       &kp F3     &kp F4     &kp F5                       &kp F6  &kp F7  &kp F8  &kp F9 &kp F10 &kp F11      &kp F12      &none         &bt BT_CLR
-&trans    &mwcycle &kp C_VOL_UP &kp C_MUTE &none      &none                        &none   &none   &none   &none  &none   &kp RBKT     &none        &none         &none
-&kp CAPS  &mpdesk  &kp C_VOL_DN &mndesk    &none      &none                        &none   &none   &none   &none  &none   &none                     &bt BT_SEL 0
-&kp LGUI  &none    &none        &none      &none      &none                        &none   &none   &none   &none  &none   &kp MINUS    &bt BT_SEL 1 &bt BT_SEL 2  &bt BT_SEL 3
-                                &none      &kp LCTRL  &trans  &trans       &trans  &trans  &trans  &to 0
-			>;
-		};
-
-		winpad_layer {
-//  ------------------------------------                        ---------------------------------------------------------------------
-// | ESC  |     |     |     |     |     |                      |      |       |       |      |       |       | |      |      |       |
-// |------|-----|-----|-----|-----|-----|                      |------|-------|-------|------|-------|-------| |------|------|-------|
-// | TAB  |  -  |  9  |  8  |  7  |  +  |                      |      |       |       |      |       |       | |      |      |       |
-// |------|-----|-----|-----|-----|-----|                      |------|-------|-------|------|-------|-------|  ------|------|------ |
-// |LSHIFT|  /  |  6  |  5  |  4  |  *  |                      |      |       |       |      |       |       |        |  UP  |       |
-// |------|-----|-----|-----|-----|-----|                      |------|-------|-------|------|-------|-------|  ------|------|------ |
-// |LCTRL |  .  |  3  |  2  |  1  |  0  |                      |      |       |       |      |       |       | | LEFT | DOWN | RIGHT |
-//  --------------- -------------------------             ------------------------------- -------------------------------------------
-//                 |     |LGUI |LALT | SPACE |           | BSPACE |ENTER | RALT  |WINPAD |
-//                  -------------------------             -------------------------------
-			bindings = <
-&trans &none         &none     &none     &none     &none                             &none  &none  &none  &none &none &none     &none  &none  &none
-&trans &kp KP_MINUS  &kp KP_N9 &kp KP_N8 &kp KP_N7 &kp KP_PLUS                       &none  &none  &none  &none &none &none     &none  &none  &none
-&trans &kp KP_DIVIDE &kp KP_N6 &kp KP_N5 &kp KP_N4 &kp KP_MULTIPLY                   &none  &none  &none  &none &none &none            &trans
-&trans &kp KP_DOT    &kp KP_N3 &kp KP_N2 &kp KP_N1 &kp KP_N0                         &none  &none  &none  &none &none &none     &trans &trans &trans
-                               &none     &trans    &trans          &trans     &trans &trans &trans &to 0
-			>;
-		};
-
-		macpad_layer {
-//  ------------------------------------                        ---------------------------------------------------------------------
-// | ESC  |     |     |     |     |     |                      |      |       |       |      |       |       | |      |      |       |
-// |------|-----|-----|-----|-----|-----|                      |------|-------|-------|------|-------|-------| |------|------|-------|
-// | TAB  |  -  |  9  |  8  |  7  |  +  |                      |      |       |       |      |       |       | |      |      |       |
-// |------|-----|-----|-----|-----|-----|                      |------|-------|-------|------|-------|-------|  ------|------|------ |
-// |LSHIFT|  /  |  6  |  5  |  4  |  *  |                      |      |       |       |      |       |       |        |  UP  |       |
-// |------|-----|-----|-----|-----|-----|                      |------|-------|-------|------|-------|-------|  ------|------|------ |
-// |LGUI  |  .  |  3  |  2  |  1  |  0  |                      |      |       |       |      |       |       | | LEFT | DOWN | RIGHT |
-//  --------------- -------------------------             ------------------------------- -------------------------------------------
-//                 |     |LCTRL|LALT | SPACE |           | BSPACE |ENTER | RALT  |MACPAD |
-//                  -------------------------             -------------------------------
-			bindings = <
-&trans   &none         &none     &none     &none     &none                             &none  &none  &none  &none &none &none     &none  &none  &none
-&trans   &kp KP_MINUS  &kp KP_N9 &kp KP_N8 &kp KP_N7 &kp KP_PLUS                       &none  &none  &none  &none &none &none     &none  &none  &none
-&trans   &kp KP_DIVIDE &kp KP_N6 &kp KP_N5 &kp KP_N4 &kp KP_MULTIPLY                   &none  &none  &none  &none &none &none            &trans
-&kp LGUI &kp KP_DOT    &kp KP_N3 &kp KP_N2 &kp KP_N1 &kp KP_N0                         &none  &none  &none  &none &none &none     &trans &trans &trans
-                                 &none     &kp LCTRL &trans          &trans     &trans &trans &trans &to 1
-			>;
-		};
-	};
+            bindings = <
+&bt BT_SEL 0  &trans  &trans  &trans  &trans  &bt BT_CLR  &trans  &trans  &trans  &trans  &trans  &trans  &kp LA(PSCRN)  &trans  &trans  &bt BT_SEL 1  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &bt BT_SEL 2  &trans  &trans  &trans  &trans  &trans  &trans  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &trans  &trans  &bt BT_SEL 3  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp BSLH  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans
+            >;
+        };
+    };
 };
