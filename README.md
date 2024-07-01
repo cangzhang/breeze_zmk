@@ -6,7 +6,7 @@
 
 </p>
 
-Original code taken from: https://github.com/lemmerdeur/zmk-config.
+Original code taken from: https://github.com/Alejo1707/lemmerdeur-afternoon_breeze.
 
 **FEATURES**
 - nice!nano V2 MCUs.
