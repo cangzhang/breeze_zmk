@@ -1,9 +1,7 @@
 # Afternoon Labs Afternoon Breeze
 
 <p align="center">
-
 ![Wireless Afternoon Breeze](https://i.imgur.com/srm0qRt.jpeg)
-
 </p>
 
 Original code taken from: https://github.com/Alejo1707/lemmerdeur-afternoon_breeze.
